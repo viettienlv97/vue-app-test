@@ -10,29 +10,36 @@ import Nav from './Nav.vue'
 const store = useStore()
 const route = useRoute()
 const selectedMeal = ref(null)
-const numberOfPeople = ref(1)
+const numberOfPeople = ref(store.state?.numberOfPeople || 1)
 
 const meals = ['breakfast', 'lunch', 'dinner']
 
-function selectMeal(meal) {
+const selectMeal = (meal) => {
     selectedMeal.value = meal
-    localStorage.setItem('selectedMeal', meal)
     store.dispatch('selectMeal', meal)
 }
-function addNumber(number) {
+const addNumber = (number) => {
     numberOfPeople.value = number.value
     store.dispatch('addPeople', number.value)
 }
 
-const changePath = (path) => {
+const validateData = () => {
+    if (!selectedMeal.value) return false
+    return true
+}
+
+const changePath = (path, isGoNext = false) => {
+    if (isGoNext && !validateData()) return
+
+    if (isGoNext)  localStorage.setItem('validated-step-1', 1)
+    
+    // go next or go previous
     store.state.changePath(path)
 }
 
 onMounted(() => {
-    store.dispatch('addPeople', 1)
-    if (store.state?.selectedMeal) {
-        selectedMeal.value = store.state?.selectedMeal
-    }
+    localStorage.clear()
+    selectedMeal.value = store.state?.selectedMeal || null
 })
 </script>
 
@@ -47,6 +54,7 @@ onMounted(() => {
             />
             <NumberInput
                 :title="'Please Enter Number of people'"
+                :number="numberOfPeople"
                 :minValue="1"
                 :maxValue="10"
                 @addNumber="addNumber"
@@ -55,7 +63,7 @@ onMounted(() => {
         <Nav 
             :currentRoute="route.path"
             @toPreviousRoute="changePath"
-            @toNextRoute="changePath"
+            @toNextRoute="(path) => changePath(path, true)"
         />
     </div>
 </template>

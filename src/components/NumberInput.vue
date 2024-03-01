@@ -3,10 +3,13 @@ import {ref} from 'vue'
 
 const props = defineProps([
     'title',
+    'number',
     'minValue',
     'maxValue'
 ])
-const count = ref(props.minValue)
+console.log(props.number);
+const count = ref(props.number || props.minValue)
+console.log(count.value);
 const emit = defineEmits('addNumber')
 
 function addDish(increse = true) {
@@ -15,7 +18,6 @@ function addDish(increse = true) {
     } else {
         count.value <= props.minValue ? count.value : count.value--
     }
-    console.log(count);
     emit('addNumber', count)
 }
 </script>

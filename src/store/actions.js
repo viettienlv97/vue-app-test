@@ -8,8 +8,8 @@ const actions = {
     selectRestaurant({commit}, restaurant) {
         commit('selectRestaurant', restaurant)
     },
-    setPath({commit}, currentPath) {
-        commit('setPath', currentPath)
+    addDishes({commit}, selectedDishes) {
+        commit('addDishes', selectedDishes)
     },
     addChangePath({commit}, changePath) {
         commit('addChangePath', changePath)

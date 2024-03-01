@@ -2,16 +2,18 @@
 import {ref, onMounted, watch} from 'vue'
 
 import {useStore} from 'vuex'
-import { routes } from "./routes/index";
 import {useRouter} from 'vue-router'
+import {useRoute} from 'vue-router'
+
+import { routes } from "./routes/index";
 
 //import Nav from "./components/Nav.vue";
 
 const store = useStore()
 const router = useRouter()
-const pathRoutes = routes.filter(route => route.path !== '/')
-const paths = pathRoutes.map(route => route.path)
-const currentRoute = ref('/step1')
+const route = useRoute()
+const paths = routes.map(route => route.path)
+const currentRoute = ref('/')
 
 const changePath = (path) => {
   router.push(path)
@@ -53,23 +55,21 @@ const checkStep2 = async () => {
 }
 
 onMounted(() => {
-  store.dispatch('setPath', currentRoute.value)
   store.dispatch('addChangePath', changePath)
 })
 </script>
 
 <template>
-  <div class="navigation">
-    <button
-      v-for="(route, index) in pathRoutes"
+  <div class="navigation d-flex">
+    <div class="box mr"
+      v-for="(route, index) in routes"
       :key="index"
-      @click="changePath(route.path)"
       :class="{
         'is-focus': route.path == currentRoute
       }"
     >
       {{ route.name }}
-    </button>
+    </div>
   </div>
   <router-view />
   <!-- <Nav 
@@ -84,6 +84,9 @@ onMounted(() => {
 <style scoped>
 .navigation {
   margin-bottom: 6rem;
+}
+.mr{
+  margin-right: 1px;
 }
 .is-focus {
   background-color: rgb(0, 170, 192);

@@ -8,7 +8,7 @@ const store = createStore({
             selectedMeal: null,
             numberOfPeople: 0,
             restaurant: null,
-            currentPath: null,
+            selectedDishes: [],
             changePath: null
         }
     },

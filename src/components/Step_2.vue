@@ -11,7 +11,7 @@ const store = useStore()
 const route = useRoute()
 
 const selectedRestaurant = ref(null)
-let choosenMeal = 'lunch'
+let choosenMeal = store.state.selectedMeal
 let restaurants = []
 
 dishes.forEach((dish) => {
@@ -31,7 +31,16 @@ const chooseRestaurant = (restaurant) => {
     store.dispatch('selectRestaurant', restaurant)
 }
 
-const changePath = (path) => {
+const validateData = () => {
+    if (!selectedRestaurant.value) return false
+    return true
+}
+
+const changePath = (path, isGoNext = false) => {
+    if (isGoNext && !validateData()) return
+
+    if (isGoNext)  localStorage.setItem('validated-step-2', 1)
+    // go next or go previous
     store.state.changePath(path)
 }
 </script>
@@ -49,7 +58,7 @@ const changePath = (path) => {
         <Nav 
             :currentRoute="route.path"
             @toPreviousRoute="changePath"
-            @toNextRoute="changePath"
+            @toNextRoute="(path) => changePath(path, true)"
         />
     </div>
 </template>

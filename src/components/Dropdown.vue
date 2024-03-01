@@ -21,7 +21,7 @@ function chooseItem(item) {
         <div>
             {{ title }}
         </div>
-        <button class="dd-btn" @click="showDropdown = !showDropdown; console.log(props.options)">
+        <button class="dd-btn" @click="showDropdown = !showDropdown">
             <span class="dd-btn-label">
                 {{props.selectedItem || '---'}}
             </span>
@@ -42,7 +42,7 @@ function chooseItem(item) {
 
 <style scoped>
     .dd-btn{
-        width: 11rem;
+        width: 12rem;
         display: flex;
         height: 2rem;
         box-shadow: none;
