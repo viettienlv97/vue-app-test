@@ -14,6 +14,23 @@ const changePath = (path) => {
     store.state.changePath(path)
 }
 
+const submit = () => {
+    const {
+        selectedMeal,
+        numberOfPeople,
+        restaurant,
+        selectedDishes
+    } = allData.value
+
+    console.log(`Meal: ${selectedMeal}`);
+    console.log(`No. of People: ${numberOfPeople}`);
+    console.log(`Restaurant: ${restaurant}`);
+    console.log('Dishes:');
+    selectedDishes.forEach(dish => {
+        console.log(`${dish.name} - ${dish.numberOfDishes}`);
+    })
+}
+
 onMounted(() => {
     let state = store.state
     allData.value = {
@@ -49,7 +66,7 @@ onMounted(() => {
         <Nav 
             :currentRoute="route.path"
             @toPreviousRoute="changePath"
-            @toNextRoute="changePath"
+            @submit="submit"
         />
     </div>
 </template>

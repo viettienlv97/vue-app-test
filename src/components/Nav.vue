@@ -4,7 +4,7 @@ import {routes} from '../routes/index.js'
 
 const props = defineProps(['currentRoute'])
 
-const emit = defineEmits('toPreviousRoute', 'toNextRoute')
+const emit = defineEmits('toPreviousRoute', 'toNextRoute', 'submit')
 
 function goPrevious() {
     let index = routes.indexOf(routes.find((route) => route.path === props.currentRoute))
@@ -33,7 +33,7 @@ function goNext() {
             >Next</div>
             <div v-else
                 class="box box-hover"
-                @click="console.log('Submit')"
+                @click="emit('submit')"
             >Submit
             </div>
         </div>
