@@ -11,10 +11,8 @@ import Nav from './Nav.vue'
 const store = useStore()
 const route = useRoute()
 
-const selectedDish = ref([])
 const selectedDishes = ref(store.state?.selectedDishes || [])
 const nextStep = ref(false)
-//const totalNumberOfDishes = ref(0)
 
 const selectedMeal = store.state?.selectedMeal
 const selectedRestaurant = store.state?.restaurant

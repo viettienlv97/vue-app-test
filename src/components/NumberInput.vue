@@ -26,7 +26,7 @@ function addDish(increse = true) {
 <template>
     <div class="input-number">
         <div>{{ title }}</div>
-        <div class="input-wrapper d-flex justify-content-between">
+        <div class="input-wrapper box-border d-flex justify-content-between">
             <span class="input-n">{{ count }}</span>
             <div class="input-btn d-flex flex-column">
                 <svg @click="addDish()"
@@ -53,7 +53,6 @@ function addDish(increse = true) {
     }
     .input-wrapper{
         width: 10rem;
-        border: 2px solid black;
     }
     .input-btn {
         border-left: 2px solid black;
@@ -69,10 +68,5 @@ function addDish(increse = true) {
     .input-n{
         width: 11rem;
     }
-    .small {
-        width: 15rem;
-        font-size: 0.7rem;
-        font-weight: bold;
-        color: rgb(218, 0, 0);
-    }
+    
 </style>

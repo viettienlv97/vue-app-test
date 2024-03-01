@@ -38,14 +38,6 @@ const validateData = () => {
     return true
 }
 
-// const changePath = (path, isGoNext = false) => {
-//     if (isGoNext && !validateData()) return
-
-//     if (isGoNext)  localStorage.setItem('validated-step-2', 1)
-//     // go next or go previous
-//     store.state.changePath(path)
-// }
-
 const goNext = (path) => {
     nextStep.value = true
 
@@ -53,11 +45,9 @@ const goNext = (path) => {
 
     localStorage.setItem('validated-step-2', 1)
 
-    // go next or go previous
     store.state.changePath(path)
 }
 const goPrevious = (path) => {
-    // go next or go previous
     store.state.changePath(path)
 }
 

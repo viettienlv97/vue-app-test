@@ -56,7 +56,7 @@ onMounted(() => {
             </div>
             <div class="d-flex justify-content-between mt">
                 <div>Dishes</div>
-                <div class="dishes-wrapper detail">
+                <div class="dishes-wrapper box-border detail">
                     <div v-for="(dish ,index) in allData.selectedDishes" :key="index">
                         <span>{{ dish.name }} - {{ dish.numberOfDishes }}</span>
                     </div>
@@ -82,7 +82,6 @@ onMounted(() => {
     }
     .dishes-wrapper {
         padding: 0.5rem 1rem 1rem 0.5rem;
-        border: 2px solid black;
     }
     .detail {
         width: 15rem;
