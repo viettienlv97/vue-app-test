@@ -12,7 +12,9 @@ const store = useStore()
 const route = useRoute()
 
 const selectedDish = ref([])
-const selectedDishes = ref([])
+const selectedDishes = ref(store.state?.selectedDishes || [])
+const nextStep = ref(false)
+const totalNumberOfDishes = ref(0)
 
 const selectedMeal = store.state?.selectedMeal
 const selectedRestaurant = store.state?.restaurant
@@ -21,14 +23,12 @@ let restaurantServingDishes = totalDishes.filter(dish =>
     dish.restaurant === selectedRestaurant && dish.availableMeals.find(meal => meal === selectedMeal)
 )
 
-console.log(restaurantServingDishes);
-
 const dishes = ref(restaurantServingDishes.map(dish => dish.name))
 const total = dishes.value.length
 function addDish() {
     if (selectedDishes.value.length !== dishes.length) {
         selectedDishes.value.push({
-        name: '',
+        name: null,
         numberOfDishes: 1
     })
     }
@@ -51,28 +51,32 @@ function addNumber(dish, number, index) {
 const addDishes = async () => {
     if (!selectedDishes.value.length) return false
 
-    let totalNumberOfDishes = 0
     selectedDishes.value.forEach((dish) => {
-        if (!dish.name || !dish.numberOfDishes) return false
+        let dishName = dish.name
+        if (!dishName || dishName === '') {
+            return false
+        }
+        if (!dish.numberOfDishes) return false
 
-        totalNumberOfDishes += dish.numberOfDishes
+        totalNumberOfDishes.value += dish.numberOfDishes
     })
 
-    if (totalNumberOfDishes < store.state.numberOfPeople) return false
-
+    if (totalNumberOfDishes.value < store.state.numberOfPeople) return false
     await store.dispatch('addDishes', selectedDishes.value)
     return true
 }
 
-const changePath = async (path, isGoNext = false) => {
-    if (isGoNext) {
-        if (! await addDishes()) {
-            return 
-        }
-    }
+const goNext = async (path) => {
+    nextStep.value = true
 
-    if (isGoNext)  localStorage.setItem('validated-step-3', 1)
+    let isAddDishes = await addDishes()
+    if (!isAddDishes) return
 
+    localStorage.setItem('validated-step-3', 1)
+    store.state.changePath(path)
+}
+
+const goPrevious = (path) => {
     store.state.changePath(path)
 }
 
@@ -95,12 +99,16 @@ onMounted(() => {
                 <div class="d-flex justify-content-between">
                     <Dropdown
                         :title="'Please Select a Dish'"
+                        :invalid="nextStep && !dish.name"
                         :selectedItem="dish.name"
                         :options="dishes"
                         @chooseItem="(item) => chooseDish(dish, item, index)"
                     />
                     <NumberInput
                         :title="'Please enter no. of servings'"
+                        :invalid="nextStep && (totalNumberOfDishes < store.state.numberOfPeople)"
+                        :invalid-title="'* Number of dishes should be greater or equal to the number of people'"
+                        :number="dish.numberOfDishes"
                         :minValue="1"
                         :maxValue="10"
                         @addNumber="(number) => addNumber(dish, number, index)"
@@ -111,8 +119,8 @@ onMounted(() => {
         </div>
         <Nav 
             :currentRoute="route.path"
-            @toPreviousRoute="changePath"
-            @toNextRoute="(path) => changePath(path, true)"
+            @toPreviousRoute="goPrevious"
+            @toNextRoute="(path) => goNext(path)"
         />
     </div>
 </template>

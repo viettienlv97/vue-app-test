@@ -19,7 +19,6 @@ onMounted(() => {
     allData.value = {
         ...state
     }
-    console.log(allData.value);
 })
 </script>
 

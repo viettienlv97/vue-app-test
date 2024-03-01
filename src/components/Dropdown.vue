@@ -7,6 +7,7 @@ const showDropdown = ref(false)
 
 const props = defineProps([
     'title',
+    'invalid',
     'selectedItem',
     'options'
 ])
@@ -29,6 +30,7 @@ function chooseItem(item) {
                 'rotate': showDropdown
             }" width="32px" height="32px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="0" fill="none" width="24" height="24"></rect> <g> <path d="M7 10l5 5 5-5"></path> </g> </g></svg>
         </button>
+        <div v-if="invalid" class="small">* Please select</div>
         <div v-if="showDropdown" class="dd-menu position-absolute">
             <div v-for="(item, index) in props.options" :key="index"
                 class="dd-item" 
@@ -72,5 +74,9 @@ function chooseItem(item) {
     .i-btn:hover
      {
         background-color: rgb(214, 214, 214);
+    }
+    .small {
+        font-weight: bold;
+        color: rgb(218, 0, 0);
     }
 </style>

@@ -3,13 +3,14 @@ import {ref} from 'vue'
 
 const props = defineProps([
     'title',
+    'invalid',
+    'invalidTitle',
     'number',
     'minValue',
     'maxValue'
 ])
-console.log(props.number);
+
 const count = ref(props.number || props.minValue)
-console.log(count.value);
 const emit = defineEmits('addNumber')
 
 function addDish(increse = true) {
@@ -34,6 +35,7 @@ function addDish(increse = true) {
                     class="i-btn" width="16px" height="16px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="0" fill="none" width="24" height="24"></rect> <g> <path d="M7 10l5 5 5-5"></path> </g> </g></svg>
             </div>
         </div>
+        <div v-if="invalid" class="small">{{ invalidTitle }}</div>
     </div>
 </template>
 
@@ -66,5 +68,11 @@ function addDish(increse = true) {
     }
     .input-n{
         width: 11rem;
+    }
+    .small {
+        width: 15rem;
+        font-size: 0.7rem;
+        font-weight: bold;
+        color: rgb(218, 0, 0);
     }
 </style>

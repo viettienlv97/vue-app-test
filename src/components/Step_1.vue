@@ -9,8 +9,10 @@ import Nav from './Nav.vue'
 
 const store = useStore()
 const route = useRoute()
+
 const selectedMeal = ref(null)
 const numberOfPeople = ref(store.state?.numberOfPeople || 1)
+const nextStep = ref(false)
 
 const meals = ['breakfast', 'lunch', 'dinner']
 
@@ -28,11 +30,17 @@ const validateData = () => {
     return true
 }
 
-const changePath = (path, isGoNext = false) => {
-    if (isGoNext && !validateData()) return
+const goNext = (path) => {
+    nextStep.value = true
 
-    if (isGoNext)  localStorage.setItem('validated-step-1', 1)
-    
+    if (!validateData()) return
+
+    localStorage.setItem('validated-step-1', 1)
+
+    // go next or go previous
+    store.state.changePath(path)
+}
+const goPrevious = (path) => {
     // go next or go previous
     store.state.changePath(path)
 }
@@ -48,6 +56,7 @@ onMounted(() => {
         <div class="wrapper">
             <Dropdown
                 :title="'Please select a meals'"
+                :invalid="nextStep && !selectedMeal"
                 :selectedItem="selectedMeal"
                 :options="meals"
                 @chooseItem="selectMeal"
@@ -62,8 +71,8 @@ onMounted(() => {
         </div>
         <Nav 
             :currentRoute="route.path"
-            @toPreviousRoute="changePath"
-            @toNextRoute="(path) => changePath(path, true)"
+            @toPreviousRoute="goPrevious"
+            @toNextRoute="(path) => goNext(path)"
         />
     </div>
 </template>

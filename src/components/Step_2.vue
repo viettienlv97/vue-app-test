@@ -11,6 +11,8 @@ const store = useStore()
 const route = useRoute()
 
 const selectedRestaurant = ref(null)
+const nextStep = ref(false)
+
 let choosenMeal = store.state.selectedMeal
 let restaurants = []
 
@@ -21,7 +23,7 @@ dishes.forEach((dish) => {
     }
 })
 restaurants = new Set(...[restaurants])
-console.log(restaurants)
+
 onMounted(() => {
     if (store.state?.restaurant) selectedRestaurant.value = store.state?.restaurant
 })
@@ -36,13 +38,29 @@ const validateData = () => {
     return true
 }
 
-const changePath = (path, isGoNext = false) => {
-    if (isGoNext && !validateData()) return
+// const changePath = (path, isGoNext = false) => {
+//     if (isGoNext && !validateData()) return
 
-    if (isGoNext)  localStorage.setItem('validated-step-2', 1)
+//     if (isGoNext)  localStorage.setItem('validated-step-2', 1)
+//     // go next or go previous
+//     store.state.changePath(path)
+// }
+
+const goNext = (path) => {
+    nextStep.value = true
+
+    if (!validateData()) return
+
+    localStorage.setItem('validated-step-2', 1)
+
     // go next or go previous
     store.state.changePath(path)
 }
+const goPrevious = (path) => {
+    // go next or go previous
+    store.state.changePath(path)
+}
+
 </script>
 
 <template>
@@ -50,6 +68,7 @@ const changePath = (path, isGoNext = false) => {
         <div class="wrapper">
             <Dropdown
                 :title="'Please Select a Restaurant'"
+                :invalid="nextStep && !selectedRestaurant"
                 :selectedItem="selectedRestaurant"
                 :options="restaurants"
                 @chooseItem="chooseRestaurant"
@@ -57,8 +76,8 @@ const changePath = (path, isGoNext = false) => {
         </div>
         <Nav 
             :currentRoute="route.path"
-            @toPreviousRoute="changePath"
-            @toNextRoute="(path) => changePath(path, true)"
+            @toPreviousRoute="goPrevious"
+            @toNextRoute="(path) => goNext(path)"
         />
     </div>
 </template>

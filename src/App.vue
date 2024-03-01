@@ -31,7 +31,6 @@ const toNextRoute = (path) => {
 }
 
 const canGoNext = (path) => {
-  console.log(paths);
   if (!path || !paths.includes(path)) return false
 
   if (paths[0] === path && checkStep1()) return true
