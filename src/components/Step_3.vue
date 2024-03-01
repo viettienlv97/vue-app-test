@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import {useStore} from 'vuex'
 import {useRoute} from 'vue-router'
 import { dishes as totalDishes} from '../constants';
@@ -14,7 +14,7 @@ const route = useRoute()
 const selectedDish = ref([])
 const selectedDishes = ref(store.state?.selectedDishes || [])
 const nextStep = ref(false)
-const totalNumberOfDishes = ref(0)
+//const totalNumberOfDishes = ref(0)
 
 const selectedMeal = store.state?.selectedMeal
 const selectedRestaurant = store.state?.restaurant
@@ -51,15 +51,16 @@ function addNumber(dish, number, index) {
 const addDishes = async () => {
     if (!selectedDishes.value.length) return false
 
+    let invalidName = false
     selectedDishes.value.forEach((dish) => {
         let dishName = dish.name
         if (!dishName || dishName === '') {
-            return false
+            invalidName = true
         }
-        if (!dish.numberOfDishes) return false
 
-        totalNumberOfDishes.value += dish.numberOfDishes
+        //totalNumberOfDishes.value += dish.numberOfDishes
     })
+    if (invalidName) return false
 
     if (totalNumberOfDishes.value < store.state.numberOfPeople) return false
     await store.dispatch('addDishes', selectedDishes.value)
@@ -79,6 +80,14 @@ const goNext = async (path) => {
 const goPrevious = (path) => {
     store.state.changePath(path)
 }
+
+const totalNumberOfDishes = computed(() => {
+    let total = 0
+    selectedDishes.value.forEach((dish) => {
+        total += dish.numberOfDishes
+    })
+    return total
+})
 
 onMounted(() => {
     if (store.state.selectedDishes.length) {
