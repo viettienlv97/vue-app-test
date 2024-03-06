@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import store from '../store/index.js'
 
 import Step_1 from '../components/Step_1.vue'
@@ -42,7 +42,7 @@ const beforeEnter = (next, validated) => {
 }
 
 const router = createRouter({
-	history: createWebHistory(),
+	history: createWebHashHistory(),
 	routes,
 	linkActiveClass: "active"
 });
